@@ -1,24 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialCarts = {
-  cartItems: [
-    {
-      qtr: 1,
-      discount_price: 0,
-      price: 0,
-    },
-  ],
+  cartItems: 1,
 };
 
 export const cartSlices = createSlice({
-  name: cartSlices,
+  name: "orderCart",
   initialState: initialCarts,
   reducers: {
-    incriment_qtr: (state, action) => {
-      console.log("Incriment");
+    increment_qty: (state, action) => {
+      if (state.cartItems < 5) {
+        state.cartItems += 1;
+      }
+      console.log(state.cartItems);
     },
-    deccriment_qtr: (state, action) => {
-      console.log("Deccriment");
+    decrement_qty: (state, action) => {
+      if (state.cartItems > 0) {
+        state.cartItems -= 1;
+      }
+      console.log(state.cartItems);
     },
   },
 });
+
+export const { increment_qty, decrement_qty } = cartSlices.actions;
+export default cartSlices.reducer;

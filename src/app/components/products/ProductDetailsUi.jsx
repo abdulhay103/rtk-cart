@@ -1,12 +1,15 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LiaShoppingBagSolid } from "react-icons/lia";
-import { ErrorToast, SuccessToast } from "../shared/formHelper";
+import { SuccessToast } from "../shared/formHelper";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { decrement_qty, increment_qty } from "@/lib/rtk-features/cartSlice";
 
 export default function ProductDetailsUi({ product_details }) {
+  const cartItemQty = useSelector((state) => state.cartReducer.cartItems);
+  const dispatch = useDispatch();
   const router = useRouter();
   let {
     id,
@@ -20,48 +23,22 @@ export default function ProductDetailsUi({ product_details }) {
     category,
   } = product_details;
 
-  const [qtr, setQtr] = useState(1);
   const incrementQtr = () => {
-    if (qtr < 5) {
-      setQtr((qtr) => qtr + 1);
+    if (cartItemQty < 5) {
+      dispatch(increment_qty());
     }
   };
   const decrementQtr = () => {
-    if (qtr > 1) {
-      setQtr((qtr) => qtr - 1);
+    if (cartItemQty > 1) {
+      dispatch(decrement_qty());
     }
-  };
-
-  let addToCartValues = {
-    color: product_details.color,
-    size: product_details.size,
-    qty: qtr,
-    status: "pending",
   };
 
   // Add to Cart Handler
   const addtoCartHandler = async (e) => {
     e.preventDefault();
-
     SuccessToast("Product added in Cart.");
-    router.push("/products/order");
-
-    // try {
-    //   const req = await fetch("/api/products/cart", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(addToCartValues),
-    //   });
-    //   let res = await req.json();
-    //   if (res.status === "Successfully Product add to cart.") {
-    //     SuccessToast(res.status);
-    //     router.push("/products/cart");
-    //   } else {
-    //     ErrorToast(res.status);
-    //   }
-    // } catch (error) {
-    //   ErrorToast("Server Error");
-    // }
+    router.push(`/products/order/?${id}`);
   };
   return (
     <section className="section-padding container mx-auto">
@@ -144,7 +121,9 @@ export default function ProductDetailsUi({ product_details }) {
               <div className="flex items-center justify-center gap-3 rounded-md border bg-orange-500">
                 <p
                   className={
-                    qtr > 1 ? "cursor-pointer px-2 text-lg font-bold" : "hidden"
+                    cartItemQty > 1
+                      ? "cursor-pointer px-2 text-lg font-bold"
+                      : "hidden"
                   }
                   onClick={decrementQtr}
                 >
@@ -155,13 +134,15 @@ export default function ProductDetailsUi({ product_details }) {
                   type="text"
                   name="qtr"
                   id="qtr"
-                  value={qtr}
+                  value={cartItemQty}
                   className="w-16 rounded px-3 py-[6px] text-center focus:outline-none shadow"
                 />
                 <p
                   onClick={incrementQtr}
                   className={
-                    qtr < 5 ? "cursor-pointer px-2 text-lg font-bold" : "hidden"
+                    cartItemQty < 5
+                      ? "cursor-pointer px-2 text-lg font-bold"
+                      : "hidden"
                   }
                 >
                   <BiPlus className="h-6 w-6 text-white" />
