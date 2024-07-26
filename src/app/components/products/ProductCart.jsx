@@ -3,29 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 export default function ProductCart() {
   return (
-    <div className="mb-10 overflow-hidden rounded-lg border border-primary">
-      <div className="grid grid-cols-4 gap-5 p-5">
+    <section className=" container mx-auto py-10">
+      <div className="grid grid-cols-4 gap-5">
         {products.map(
-          ({
-            id,
-            title,
-            short_desc,
-            details,
-            color,
-            img,
-            price,
-            discount,
-            discount_price,
-            brand,
-            category,
-          }) => (
+          ({ id, title, img, price, discount, discount_price, brand }) => (
             <div
               key={id}
-              className="hover-500 col-span-2 min-h-72 rounded border border-primary p-5 shadow-md hover:border-deepKhaki xl:col-span-1"
+              className="hover-500 col-span-2 rounded overflow-hidden border shadow-md hover:border-deepKhaki xl:col-span-1"
             >
               <Link
                 href={`/products/${id}`}
-                className="relative flex h-36 w-full items-center justify-center overflow-hidden rounded-lg 2xl:h-40"
+                className="relative flex h-36 w-full items-center justify-center  2xl:h-40"
               >
                 <Image
                   src={img}
@@ -36,7 +24,7 @@ export default function ProductCart() {
                   className="hover-500 object-cover hover:scale-105"
                 />
               </Link>
-              <div className="pt-4">
+              <div className="p-4">
                 <Link
                   href={`/products/${id}`}
                   className="text-xs font-bold text-primary lg:text-base"
@@ -59,8 +47,11 @@ export default function ProductCart() {
                   </p>
                 </div>
               </div>
-              <div className=" bg-amber-500 hover:bg-green-500 inline hover-300 hover:text-white">
-                <Link href={`products/${id}`} className="px-5 py-3 rounded">
+              <div className=" flex justify-center bg-amber-500 hover:bg-green-500 hover-300 hover:text-white">
+                <Link
+                  href={`products/${id}`}
+                  className="w-full text-center py-2 inline-block "
+                >
                   Buy Now
                 </Link>
               </div>
@@ -68,6 +59,6 @@ export default function ProductCart() {
           )
         )}
       </div>
-    </div>
+    </section>
   );
 }

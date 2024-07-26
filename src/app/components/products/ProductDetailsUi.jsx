@@ -1,11 +1,9 @@
 "use client";
-
-import HTMLReactParser from "html-react-parser";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LiaShoppingBagSolid } from "react-icons/lia";
+import { ErrorToast, SuccessToast } from "../shared/formHelper";
 
 export default function ProductDetailsUi({ product_details }) {
   let {
@@ -19,6 +17,47 @@ export default function ProductDetailsUi({ product_details }) {
     stock,
     category,
   } = product_details;
+
+  const [qtr, setQtr] = useState(1);
+  const incrementQtr = () => {
+    if (qtr < 5) {
+      setQtr((qtr) => qtr + 1);
+    }
+  };
+  const decrementQtr = () => {
+    if (qtr > 1) {
+      setQtr((qtr) => qtr - 1);
+    }
+  };
+
+  let addToCartValues = {
+    color: product_details.color,
+    size: product_details.size,
+    qty: qtr,
+    status: "pending",
+  };
+
+  // Add to Cart Handler
+  const addtoCartHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const req = await fetch("/api/products/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(addToCartValues),
+      });
+      let res = await req.json();
+      if (res.status === "Successfully Product add to cart.") {
+        SuccessToast(res.status);
+        router.push("/products/cart");
+      } else {
+        ErrorToast(res.status);
+      }
+    } catch (error) {
+      ErrorToast("Server Error");
+    }
+  };
   return (
     <section className="section-padding container mx-auto">
       <div className="flex flex-col items-center gap-10 lg:flex-row lg:gap-16 xl:gap-20">
@@ -97,7 +136,7 @@ export default function ProductDetailsUi({ product_details }) {
               +880 1711-236096
             </p>
             <div className="flex items-center gap-5 py-6">
-              {/* <div className="flex items-center justify-center gap-3 rounded-md border-2 border-primary bg-primary">
+              <div className="flex items-center justify-center gap-3 rounded-md border bg-orange-500">
                 <p
                   className={
                     qtr > 1 ? "cursor-pointer px-2 text-lg font-bold" : "hidden"
@@ -112,23 +151,21 @@ export default function ProductDetailsUi({ product_details }) {
                   name="qtr"
                   id="qtr"
                   value={qtr}
-                  className="w-16 rounded px-3 py-[6px] text-center text-primary focus:outline-none"
+                  className="w-16 rounded px-3 py-[6px] text-center focus:outline-none shadow"
                 />
                 <p
                   onClick={incrementQtr}
                   className={
-                    qtr < 20
-                      ? "cursor-pointer px-2 text-lg font-bold"
-                      : "hidden"
+                    qtr < 5 ? "cursor-pointer px-2 text-lg font-bold" : "hidden"
                   }
                 >
                   <BiPlus className="h-6 w-6 text-white" />
                 </p>
-              </div> */}
+              </div>
               <button
-                onClick={(e) => addtoCartHadler(e)}
+                onClick={(e) => addtoCartHandler(e)}
                 type="submit"
-                className="hover-300 flex items-center rounded bg-deepKhaki/75 px-5 py-2 text-white hover:bg-deepKhaki"
+                className="hover-300 flex items-center rounded bg-green-500 px-5 py-2 text-white hover:bg-green-500/85"
               >
                 <LiaShoppingBagSolid className="size-5" />
                 <p className="pl-2">Order Now</p>
