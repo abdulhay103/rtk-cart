@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import { ErrorToast, SuccessToast } from "../shared/formHelper";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailsUi({ product_details }) {
+  const router = useRouter();
   let {
     id,
     title,
@@ -41,22 +43,25 @@ export default function ProductDetailsUi({ product_details }) {
   const addtoCartHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const req = await fetch("/api/products/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(addToCartValues),
-      });
-      let res = await req.json();
-      if (res.status === "Successfully Product add to cart.") {
-        SuccessToast(res.status);
-        router.push("/products/cart");
-      } else {
-        ErrorToast(res.status);
-      }
-    } catch (error) {
-      ErrorToast("Server Error");
-    }
+    SuccessToast("Product added in Cart.");
+    router.push("/products/order");
+
+    // try {
+    //   const req = await fetch("/api/products/cart", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(addToCartValues),
+    //   });
+    //   let res = await req.json();
+    //   if (res.status === "Successfully Product add to cart.") {
+    //     SuccessToast(res.status);
+    //     router.push("/products/cart");
+    //   } else {
+    //     ErrorToast(res.status);
+    //   }
+    // } catch (error) {
+    //   ErrorToast("Server Error");
+    // }
   };
   return (
     <section className="section-padding container mx-auto">
