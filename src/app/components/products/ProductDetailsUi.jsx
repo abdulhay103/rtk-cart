@@ -5,10 +5,15 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { SuccessToast } from "../shared/formHelper";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { decrement_qty, increment_qty } from "@/lib/rtk-features/cartSlice";
+import {
+  buySingleItem,
+  decrement_qty,
+  increment_qty,
+  update_qty,
+} from "@/lib/rtk-features/cartSlice";
 
 export default function ProductDetailsUi({ product_details }) {
-  const cartItemQty = useSelector((state) => state.cartReducer.cartItems);
+  const cartItemQty = useSelector((state) => state.cartReducer.cartItems.qty);
   const dispatch = useDispatch();
   const router = useRouter();
   let {
@@ -25,20 +30,21 @@ export default function ProductDetailsUi({ product_details }) {
 
   const incrementQtr = () => {
     if (cartItemQty < 5) {
-      dispatch(increment_qty());
+      dispatch(increment_qty(id));
     }
   };
   const decrementQtr = () => {
     if (cartItemQty > 1) {
-      dispatch(decrement_qty());
+      dispatch(decrement_qty(id));
     }
   };
 
   // Add to Cart Handler
   const addtoCartHandler = async (e) => {
     e.preventDefault();
+    dispatch(buySingleItem(id));
     SuccessToast("Product added in Cart.");
-    router.push(`/products/order/?${id}`);
+    router.push("/products/order");
   };
   return (
     <section className="section-padding container mx-auto">
