@@ -13,7 +13,7 @@ export const cartSlices = createSlice({
   reducers: {
     buySingleItem: (state, action) => {
       state.cartItems.productId = action.payload;
-      console.log(state.cartItems.productId);
+      // console.log(state.cartItems.productId);
     },
     increment_qty: (state, action) => {
       if (state.cartItems.qty < 5) {
@@ -22,8 +22,8 @@ export const cartSlices = createSlice({
       let id = action.payload;
       state.cartItems.productId = id;
 
-      console.log("+ qty ", state.cartItems.qty);
-      console.log("+ ID ", state.cartItems.productId);
+      // console.log("+ qty ", state.cartItems.qty);
+      // console.log("+ ID ", state.cartItems.productId);
     },
     decrement_qty: (state, action) => {
       if (state.cartItems.qty > 0) {
@@ -32,14 +32,14 @@ export const cartSlices = createSlice({
       let id = action.payload;
       state.cartItems.productId = id;
 
-      console.log("- qty ", state.cartItems.qty);
-      console.log("- ID ", state.cartItems.productId);
+      // console.log("- qty ", state.cartItems.qty);
+      // console.log("- ID ", state.cartItems.productId);
     },
     update_qty: (state, action) => {
       state.cartItems.qty = 1;
-      console.log("0 qty ", state.cartItems.qty);
-      console.log("0 ID ", state.cartItems.productId);
       state.cartItems.productId = 0;
+      // console.log("0 qty ", state.cartItems.qty);
+      // console.log("0 ID ", state.cartItems.productId);
     },
   },
 });
