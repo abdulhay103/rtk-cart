@@ -18,7 +18,7 @@ export default function ProductCart() {
                 <Image
                   src={img}
                   fill
-                  sizes={300}
+                  sizes={200}
                   priority={false}
                   alt={title}
                   className="hover-500 object-cover hover:scale-105"
