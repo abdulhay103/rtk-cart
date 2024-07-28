@@ -21,19 +21,17 @@ const TABLE_HEAD = [
 export function CartProducts() {
   let { qty, productId } = useSelector((state) => state.cartReducer.cartItems);
   const dispatch = useDispatch();
-  let product = products.filter((product) => product.id == productId);
-  let { id, title, discount_price, price } = product[0];
-  let totalDiscount = qty * discount_price;
-  let totalPrice = qty * price;
+  let productArray = products.filter((product) => product.id == productId);
+  let product = productArray[0];
 
   const incrementQtr = () => {
     if (qty < 5) {
-      dispatch(increment_qty(id));
+      dispatch(increment_qty(product?.id));
     }
   };
   const decrementQtr = () => {
     if (qty > 1) {
-      dispatch(decrement_qty(id));
+      dispatch(decrement_qty(product?.id));
     }
   };
 
@@ -68,7 +66,7 @@ export function CartProducts() {
             <tbody>
               <tr>
                 <td>
-                  <p className="font-normal">{title}</p>
+                  <p className="font-normal">{product?.title}</p>
                 </td>
                 <td>
                   <div className="flex items-center gap-2 ">
@@ -104,19 +102,19 @@ export function CartProducts() {
                 </td>
                 <td>
                   <p className="font-normal">
-                    {totalPrice}
+                    {qty * product?.price}
                     <span> &#2547;</span>
                   </p>
                 </td>
                 <td>
                   <p className="font-normal">
-                    {totalDiscount}
+                    {qty * product?.discount_price}
                     <span> &#2547;</span>
                   </p>
                 </td>
                 <td>
                   <p className="font-normal">
-                    {totalPrice - totalDiscount}
+                    {qty * product?.price - qty * product?.discount_price}
                     <span> &#2547;</span>
                   </p>
                 </td>
